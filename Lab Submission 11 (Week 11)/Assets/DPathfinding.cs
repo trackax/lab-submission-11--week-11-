@@ -1,53 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-
-public class PriorityQueue<TElement, TPriority>
-{
-    private class Node
-    {
-        public TElement Element;
-        public TPriority Priority;
-    }
-
-    private List<Node> nodes = new List<Node>();
-    private IComparer<TPriority> comparer;
-
-    public int Count => nodes.Count;
-
-    public PriorityQueue() : this(Comparer<TPriority>.Default) { }
-
-    public PriorityQueue(IComparer<TPriority> comparer)
-    {
-        this.comparer = comparer;
-    }
-
-    public void Enqueue(TElement element, TPriority priority)
-    {
-        nodes.Add(new Node { Element = element, Priority = priority });
-    }
-
-    public TElement Dequeue()
-    {
-        if (nodes.Count == 0)
-        {
-            throw new System.InvalidOperationException("Queue is empty.");
-        }
-
-        int bestIndex = 0;
-        for (int i = 1; i < nodes.Count; i++)
-        {
-            if (comparer.Compare(nodes[i].Priority, nodes[bestIndex].Priority) < 0)
-            {
-                bestIndex = i;
-            }
-        }
-
-        TElement bestElement = nodes[bestIndex].Element;
-        nodes.RemoveAt(bestIndex);
-        return bestElement;
-    }
-}
 
 public class DPathfinding : MonoBehaviour
 {
@@ -63,7 +15,6 @@ public class DPathfinding : MonoBehaviour
         new Vector2Int(0, -1)
     };
 
-    // 0 = walkable, 1 = wall
     private int[,] grid = new int[,]
     {
         { 0, 1, 0, 0, 0 },
@@ -136,12 +87,12 @@ public class DPathfinding : MonoBehaviour
                 if (!IsInBounds(next) || grid[next.y, next.x] == 1)
                     continue;
 
-                int newCost = costSoFar[current] + 1; // Each step costs 1 (you can change this)
+                int newCost = costSoFar[current] + 1;
 
                 if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                 {
                     costSoFar[next] = newCost;
-                    frontier.Enqueue(next, newCost); // No heuristic — pure Dijkstra
+                    frontier.Enqueue(next, newCost);
                     cameFrom[next] = current;
                 }
             }
@@ -153,7 +104,6 @@ public class DPathfinding : MonoBehaviour
             return;
         }
 
-        // Reconstruct path
         path.Clear();
         Vector2Int step = goal;
         while (step != start)

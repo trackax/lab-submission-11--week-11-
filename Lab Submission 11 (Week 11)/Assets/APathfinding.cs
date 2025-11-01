@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,7 +64,6 @@ public class APathfinding : MonoBehaviour
 
     private int Heuristic(Vector2Int a, Vector2Int b)
     {
-        // Manhattan distance
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
@@ -94,7 +92,7 @@ public class APathfinding : MonoBehaviour
                 if (!IsInBounds(next) || grid[next.y, next.x] == 1)
                     continue;
 
-                int newCost = costSoFar[current] + 1; // all moves cost 1
+                int newCost = costSoFar[current] + 1;
 
                 if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                 {
@@ -112,7 +110,6 @@ public class APathfinding : MonoBehaviour
             return;
         }
 
-        // Reconstruct path
         path.Clear();
         Vector2Int step = goal;
         while (step != start)
